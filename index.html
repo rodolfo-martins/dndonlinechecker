@@ -2,27 +2,26 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Dark and Darker Stats</title>
 </head>
 <body>
-    <div id="stats">Carregando...</div>
+    <pre id="stats">Carregando...</pre>
     
     <script>
         async function getStats() {
             try {
-                const response = await fetch('https://api.darkerdb.com/v1/population');
-                const data = await response.json();
+                // Usando proxy CORS
+                const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.darkerdb.com/v1/population'));
+                const result = await response.json();
+                const data = JSON.parse(result.contents);
                 
                 const dungeon = data.body.num_dungeon;
                 const lobby = data.body.num_lobby;
                 const total = data.body.num_online;
                 
-                // Formato para o Nightbot
                 document.getElementById('stats').textContent = 
                     `Dungeon: ${dungeon} | Lobby: ${lobby} | Total: ${total}`;
             } catch (error) {
-                document.getElementById('stats').textContent = 
-                    'Erro ao carregar dados';
+                document.getElementById('stats').textContent = 'API indisponível';
             }
         }
         
